@@ -147,10 +147,12 @@ export default class SqlQuery {
     }
 
     static replaceTimeFilters(query: string, range: TimeRange, dateTimeType = 'DATETIME', round?: number): string {
-        console.log("replaceTimeFilters query=${query} range=${range} dateTimeType=${dateTimeType} round=${round}");
+        console.log(`replaceTimeFilters query=${query} range=${range} dateTimeType=${dateTimeType} round=${round}`);
 
         let from = SqlQuery.convertTimestamp(SqlQuery.round(range.from, round || 0));
         let to = SqlQuery.convertTimestamp(SqlQuery.round(range.to, round || 0));
+
+        console.log(`let from=${from} to=${to}`);
 
         // Extend date range to be sure that first and last points
         // data is not affected by round
@@ -159,7 +161,9 @@ export default class SqlQuery {
             from -= (round * 2) - 1;
         }
 
-        return query
+        console.log(`round: from=${from} to=${to}`);
+
+        let res =  query
             .replace(
                 /\$timeFilterByColumn\(([\w_]+)\)/g,
                 (match: string, columnName: string) => (
@@ -168,6 +172,8 @@ export default class SqlQuery {
             )
             .replace(/\$from/g, from.toString())
             .replace(/\$to/g, to.toString());
+        console.log(`let res=${res}`);
+        return res;
     }
 
     static getFilterSqlForDateTime(columnName: string, isToNow: boolean, dateTimeType: string) {
