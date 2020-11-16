@@ -147,6 +147,8 @@ export default class SqlQuery {
     }
 
     static replaceTimeFilters(query: string, range: TimeRange, dateTimeType = 'DATETIME', round?: number): string {
+        console.log("replaceTimeFilters query=${query} range=${range} dateTimeType=${dateTimeType} round=${round}");
+
         let from = SqlQuery.convertTimestamp(SqlQuery.round(range.from, round || 0));
         let to = SqlQuery.convertTimestamp(SqlQuery.round(range.to, round || 0));
 
